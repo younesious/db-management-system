@@ -1,0 +1,112 @@
+//// -- LEVEL 1
+//// -- Tables and References
+
+// Creating tables
+Table company as C {
+  id int [pk, increment] // auto-increment
+  shop_id foreign
+  mobile_id foreign
+  factor_id foreign
+}
+
+Table shops as Sh {
+  id int [pk, increment]
+  name varchar
+  registered_date datetime
+  membership_type boolean
+  address text
+  phone_number int(11)
+ }
+
+Table mobiles as M {
+  id int [pk, increment]
+  register_id foreign
+  mobile_name varchar
+  product_information_id foreign
+  price int
+  color varchar
+  status products_status
+}
+
+Enum products_status {
+  out_of_stock
+  in_stock
+  running_low [note: 'less than 10'] // add column note
+}
+
+
+Table register as R{
+  id int [pk, increment] // primary key
+  mobile_id foreign
+  buyer_informations_id foreign
+  shop_id foreign
+}
+
+Table factor_details as FD {
+  id int [pk, increment]
+  final_factors_id foreign
+  price int
+  discount int
+  mobile_id foreign
+  count int
+}
+Table final_factors as FF {
+  id int [pk, increment]
+  total_price int
+  total_discount int
+  referral_number int
+  shop_id foreign
+  date_sold datetime
+}
+
+Table buyer_informations as B {
+  national_number int [pk]
+  name varchar
+  phone_number int(11)
+}
+
+Table product_informations as PI {
+  id int [pk]
+  dimensions varchar
+  weight float
+  special varchar 
+  features varchar
+  number_of_SIM_cards int
+  model varchar
+  chip varchar
+  cpu varchar 
+  processor_type varchar 
+  cpu_frequency varchar 
+  gpu varchar
+  internal_memory int 
+  ram int  
+  memory_card_support boolean
+  resolution_display varchar
+  technology varchar
+  size varchar 
+  communication_networks varchar
+  photo_resolution float
+  camera_capabilities text 
+  operating_system varchar  
+  sensors text
+  battery_specifications text
+}
+
+// Creating references
+// You can also define relaionship separately
+// > many-to-one; < one-to-many; - one-to-one
+//Ref: U.country_code > countries.code  
+
+Ref: C.shop_id - Sh.id
+Ref: C.mobile_id - M.id
+Ref: C.factor_id - FF.id
+Ref: M.register_id - R.id
+Ref: M.product_information_id - PI.id
+Ref: R.mobile_id - M.id
+Ref: R.buyer_informations_id - B.national_number
+Ref: R.shop_id - Sh.id
+Ref: FD.final_factors_id < FF.id
+Ref: FD.mobile_id - M.id
+Ref: FF.shop_id - Sh.id
+
+//----------------------------------------------//
